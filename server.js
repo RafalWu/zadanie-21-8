@@ -84,3 +84,46 @@ mark.save(function(err) {
 
     console.log('Uzytkownik ' + mark.name +  ' zapisany pomyslnie');
 });
+User.find({}, function(err, res) {
+    if (err) throw err;
+    console.log('Actual database records are ' + res);
+});
+const query = User.find({});
+const promise = query.exec();
+promise.then(function(records) {
+    console.log('Actual database records are ' + records);
+});
+promise.catch(function(reason) {
+    console.log('Something went wrong: ', reason);
+});
+User.find({ username: 'Kenny_the_boy' }).exec(function(err, res) {
+    if (err) throw err;
+    console.log('Record you are looking for is ' + res);
+});
+User.find({ username: 'Kenny_the_boy' }, function(err, user) {
+    if (err) throw err;
+    console.log('Old password is ' + user[0].password);
+    user[0].password = 'newPassword';
+    console.log('New password is ' + user[0].password);
+
+
+    user[0].save(function(err) {
+        if (err) throw err;
+
+        console.log('Uzytkownik ' + user[0].name + ' zostal pomyslnie zaktualizowany');
+    })
+});
+User.find({ username: 'Mark_the_boy' }, function(err, user) {
+    if (err) throw err;
+    user = user[0];
+    user.remove(function(err) {
+        if (err) throw err;
+
+        console.log('User successfully deleted');
+    });
+});
+User.findOneAndRemove({ username: 'Benny_the_man' }, function(err) {
+    if (err) throw err;
+
+    console.log('User deleted!');
+});
